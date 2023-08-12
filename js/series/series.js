@@ -1,32 +1,6 @@
-import { buscarElemento } from "../js/busquedas.js";
-
+import { buscarElemento } from "../busquedas.js";
+import { seriesInfo } from "./infoSeries.js";
 const series = document.getElementById('series');
-
-const baseURL = 'https://image.tmdb.org/t/p/w500'; // Base URL de las imágenes de la API
-
-
-let arraySeries = [
-    'QoCZB5304P0', //El abogado del Lincoln
-    'hatjI-dygQE', //The First Responders
-    '3Mz_aAbtm6E', //ZOOM 100
-    '_2un1aU7mT0', //Nobody | The Bus Fight
-    'U8W4VSBo4JU', //TWISTED METAL
-    'JhNIEExNAYE', //Seducción Fatal
-    'KcBStos46EM', //Loki 
-    'SGPmATwOMzs', //Star Trek: Strange New Worlds
-    'HLyXCOgXJns', //ONE PIECE 
-    'CKUf6eeNieM', //YHWACH : Hijo mío, NACIDO EN LA OSCURIDAD
-    '4i5BAEyhpEg', //HIJACK
-    'aPBUUJbrAWo', //nn
-    'AZ5LA42rbHo', //Futurama
-    '2sJTSw2qWnQ', //Operativo: Lioness
-    'DiJ71etOG8M', //Invasión Secreta
-    'FnYQWX5Bo_k', //The Witcher
-    '1dqOSD2iDdI', //Fundación
-    'XL2uitZ0TvY', //Heartstopper
-    'QIdFe_UF6EM', //Las Flores Perdidas de Alice Hart
-    'q8HTURegJnc', //Good Omens
-  ]
 
 const crearSeries = (serieData) => {
     const divGeneral = document.createElement('div');
@@ -47,15 +21,15 @@ const crearSeries = (serieData) => {
 
     const img = document.createElement('img');
     img.id = 'img2';
-    img.src = baseURL + serieData.poster_path; // Concatenar el 'poster_path' con la base URL de las imágenes
+    img.src = serieData.imagen; // Concatenar el 'poster_path' con la base URL de las imágenes
 
     const h1 = document.createElement('h4');
     h1.id = 'h4';
-    h1.textContent = serieData.name; // Asigna el nombre de la serie desde los datos obtenidos de la API
+    h1.textContent = serieData.titulo; // Asigna el nombre de la serie desde los datos obtenidos de la API
 
     const descripcion = document.createElement('p');
     descripcion.id = 'description';
-    descripcion.textContent = serieData.overview; // Asigna la descripción de la serie desde los datos obtenidos de la API
+    descripcion.textContent = serieData.descripcion; // Asigna la descripción de la serie desde los datos obtenidos de la API
 
     const leermas = document.createElement('button');
     leermas.id = 'leermas';
@@ -77,37 +51,23 @@ const crearSeries = (serieData) => {
     button.appendChild(divGeneral);
 
     series.appendChild(button);
-    let key = 0;
+    let key = serieData.trailer;
     let array = [div, divGeneral, img, h1, descripcion, series, leermas, div2, buttonLook, key];
     return array
 };
 
-const requireOptions = {
-    method: 'GET',
-    headers: {
-        accept: 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlYmU4YTdkZDlkZTlmZjJkZWVlZmRhNzU2NWQxNjI4OSIsInN1YiI6IjY0YzNiMWM2MDI4ZjE0MDBlZTlkN2I1MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.z9fXvxMy_bnwoHZg-fCDQrcYq3vkYgavLw4suPglYgg'
-    }
-};
-
 let matriz2 = [];
 let i = 0;
+seriesInfo.forEach(element => {
+    let array = crearSeries(element);
+    console.log(array[9]);
+    matriz2.push(array)
+    i++;
+})
 
-fetch('https://api.themoviedb.org/3/trending/tv/day?language=en-US', requireOptions)
-    .then(response => response.json())
-    .then(data => {
-        const seriesTrending = data.results;
-        for (const serie of seriesTrending) {
-            let crearS = crearSeries(serie);
-            crearS[9] = arraySeries[i]
-            matriz2.push(crearS)
-            i++;
-        }
-        leerMasyMenos2()
-        buscarElemento();
-        btnLookT();
-    })
-    .catch(err => console.error(err));
+btnLookT()
+leerMasyMenos2();
+buscarElemento();
 
 console.log(matriz2);
 function leerMasyMenos2() {
