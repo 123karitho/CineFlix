@@ -1,26 +1,5 @@
-import { buscarElemento } from "../js/busquedas.js";
-
-let trailer = [
-    'oBmazlyP220',//Spider-Man
-    'NjBGzJ5FFmI', //TRANSFORMERS
-    'zh4KhVSMwtQ', //BARBIE
-    '7wuK5PhzcNY',//MEGALODON
-    'av-9lvBdZ0k', //THE FLASH
-    'uNZu5dNck9Y',// INSIDIOUS
-    'jxkGUWRJV24',//The Venture Bros: Radiant Is The Blood Of The Baboon Heart
-    'Gwk9EMcDsj4',//HIDDENS STRIKE
-    'uIvBFUYzeOc',//LA SIRENITA
-    'mJqwSpxq2W4', //Resident Evil Death Island
-    'FDhvbIqTQwI',//FAST & FURIOUS X
-    'sinstLBy9l8', //Guardianes de la Galaxia
-    'OzAoGlARPFQ',//MIRACULOUS
-    'xdxFwUqKc-A',//Shin Kamen Rider Opening
-    'w65PKQBycNI',//MAN OF STEEL 2
-    'lizOlZ-r3II',//映画『キングダム 運命の炎』予告
-    'JdMxXytjzoc',//Ruby: Aventuras De Una Kraken Adolescente
-    'izQA8C3emt4',//МАВКА. ЛІСОВА ПІСНЯ
-    'awpDl9eB6Tg',//WARHORSE ONE
-]
+import { buscarElemento } from "../busquedas.js";
+import { peliculas } from "./infoPelis.js";
 
 // JavaScript
 const section = document.getElementById('peliculas');
@@ -76,31 +55,22 @@ const crear = () => {
     return array
 }
 
-const options = { method: 'GET' };
 let matriz = [];
 let i = 0;
-fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&api_key=ebe8a7dd9de9ff2deeefda7565d16289&language=en-US&page=1&sort_by=popularity.desc', options)
-    .then(response => response.json())
-    .then(response => {
-        console.log(response.results);
-        response.results.forEach(element => {
-            let array = crear();
-            array[2].src = 'https://image.tmdb.org/t/p/original' + element.backdrop_path
-            array[3].textContent = element.original_title;
-            array[4].textContent = element.overview
-            console.log(array[4].textContent);
-            array[9] = trailer[i];
-            console.log(array[9]);
-            matriz.push(array)
-            i++;
-        });
-        leerMasyMenos()
-        buscarElemento();
-        btnLookT();
-    })
-    .catch(err => console.error(err));
+peliculas.forEach(element => {
+    let array = crear();
+    array[2].src = element.imagen;
+    array[3].textContent = element.titulo;
+    array[4].textContent = element.descripcion;
+    array[9] = element.trailer;
+    console.log(array[9]);
+    matriz.push(array)
+    i++;
+})
 
-
+leerMasyMenos()
+btnLookT();
+buscarElemento();
 function leerMasyMenos() {
     matriz.forEach(elemento => {
         elemento[6].addEventListener('click', () => {
@@ -198,3 +168,4 @@ const cardTrailer = () => {
 }
 // Trailer
 cardTrailer();
+
